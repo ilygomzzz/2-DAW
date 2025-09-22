@@ -1,0 +1,234 @@
+package es.javierserrano.domain.mapper;
+
+import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.model.Author;
+import es.javierserrano.domain.model.Book;
+import es.javierserrano.domain.model.Publisher;
+import es.javierserrano.domain.repository.entity.AuthorEntity;
+import es.javierserrano.domain.repository.entity.BookEntity;
+import es.javierserrano.domain.repository.entity.PublisherEntity;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BookMapperTest {
+
+    @Nested
+    class FromBookEntityToBook {
+        @Test
+        @DisplayName("Given bookEntity should return book")
+        void givenBookEntityShouldReturnBook() {
+            PublisherEntity publisherEntity = new PublisherEntity(
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            List<AuthorEntity> authorsEntity = List.of(
+                    new AuthorEntity("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
+                    new AuthorEntity("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+            );
+
+            BookEntity bookEntity = new BookEntity(
+                    "1234567890",
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisherEntity,
+                    authorsEntity
+            );
+
+            Book book = BookMapper.getInstance().fromBookEntityToBook(bookEntity);
+
+            assertAll(
+                    () -> assertEquals(bookEntity.isbn(), book.getIsbn()),
+                    () -> assertEquals(bookEntity.titleEs(), book.getTitleEs()),
+                    () -> assertEquals(bookEntity.titleEn(), book.getTitleEn()),
+                    () -> assertEquals(bookEntity.synopsisEs(), book.getSynopsisEs()),
+                    () -> assertEquals(bookEntity.synopsisEn(), book.getSynopsisEn()),
+                    () -> assertEquals(bookEntity.basePrice(), book.getBasePrice()),
+                    () -> assertEquals(bookEntity.discountPercentage(), book.getDiscountPercentage()),
+                    () -> assertEquals(bookEntity.cover(), book.getCover()),
+                    () -> assertEquals(bookEntity.publicationDate(), book.getPublicationDate()),
+                    () -> assertEquals(bookEntity.publisher().name(), book.getPublisher().getName()),
+                    () -> assertEquals(bookEntity.authors().size(), book.getAuthors().size())
+            );
+        }
+
+        @Test
+        @DisplayName("Given null bookEntity should throw BusinessException")
+        void givenNullBookEntityShouldThrowBusinessException() {
+            assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookEntityToBook(null));
+        }
+    }
+
+    @Nested
+    class FromBookToBookEntity {
+        @Test
+        @DisplayName("Given book should return bookEntity")
+        void givenBookShouldReturnBookEntity() {
+            List<Author> authors = List.of(
+                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
+                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+            );
+
+            Publisher publisher = new Publisher(
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            Book book = new Book(
+                    "1234567890",
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    authors
+            );
+
+            BookEntity bookEntity = BookMapper.getInstance().fromBookToBookEntity(book);
+
+            assertAll(
+                    () -> assertEquals(book.getIsbn(), bookEntity.isbn()),
+                    () -> assertEquals(book.getTitleEs(), bookEntity.titleEs()),
+                    () -> assertEquals(book.getTitleEn(), bookEntity.titleEn()),
+                    () -> assertEquals(book.getSynopsisEs(), bookEntity.synopsisEs()),
+                    () -> assertEquals(book.getSynopsisEn(), bookEntity.synopsisEn()),
+                    () -> assertEquals(book.getBasePrice(), bookEntity.basePrice()),
+                    () -> assertEquals(book.getDiscountPercentage(), bookEntity.discountPercentage()),
+                    () -> assertEquals(book.getCover(), bookEntity.cover()),
+                    () -> assertEquals(book.getPublicationDate(), bookEntity.publicationDate()),
+                    () -> assertEquals(book.getPublisher().getName(), bookEntity.publisher().name()),
+                    () -> assertEquals(book.getAuthors().size(), bookEntity.authors().size())
+            );
+        }
+
+        @Test
+        @DisplayName("Given null book should throw BusinessException")
+        void givenNullBookShouldThrowBusinessException() {
+            assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookToBookEntity(null));
+        }
+    }
+
+    @Nested
+    class FromBookToBookDto {
+        @Test
+        @DisplayName("Given book should return bookDto")
+        void givenBookShouldReturnBookDto() {
+            List<Author> authors = List.of(
+                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
+                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+            );
+
+            Publisher publisher = new Publisher(
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            Book book = new Book(
+                    "1234567890",
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    authors
+            );
+
+            var bookDto = BookMapper.getInstance().fromBookToBookDto(book);
+
+            assertAll(
+                    () -> assertEquals(book.getIsbn(), bookDto.isbn()),
+                    () -> assertEquals(book.getTitleEs(), bookDto.titleEs()),
+                    () -> assertEquals(book.getTitleEn(), bookDto.titleEn()),
+                    () -> assertEquals(book.getSynopsisEs(), bookDto.synopsisEs()),
+                    () -> assertEquals(book.getSynopsisEn(), bookDto.synopsisEn()),
+                    () -> assertEquals(book.getBasePrice(), bookDto.basePrice()),
+                    () -> assertEquals(book.getDiscountPercentage(), bookDto.discountPercentage()),
+                    () -> assertEquals(book.getCover(), bookDto.cover()),
+                    () -> assertEquals(book.getPublicationDate(), bookDto.publicationDate()),
+                    () -> assertEquals(book.getPublisher().getName(), bookDto.publisher().name()),
+                    () -> assertEquals(book.getAuthors().size(), bookDto.authors().size())
+            );
+        }
+
+        @Test
+        @DisplayName("Given null book should throw BusinessException")
+        void givenNullBookShouldThrowBusinessException() {
+            assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookToBookDto(null));
+        }
+    }
+
+    @Nested
+    class FromBookDtoToBook {
+        @Test
+        @DisplayName("Given bookDto should return book")
+        void givenBookDtoShouldReturnBook() {
+            List<Author> authors = List.of(
+                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
+                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+            );
+
+            Publisher publisher = new Publisher(
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            Book book = new Book(
+                    "1234567890",
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    authors
+            );
+
+            var bookDto = BookMapper.getInstance().fromBookToBookDto(book);
+            var mappedBook = BookMapper.getInstance().fromBookDtoToBook(bookDto);
+
+            assertAll(
+                    () -> assertEquals(bookDto.isbn(), mappedBook.getIsbn()),
+                    () -> assertEquals(bookDto.titleEs(), mappedBook.getTitleEs()),
+                    () -> assertEquals(bookDto.titleEn(), mappedBook.getTitleEn()),
+                    () -> assertEquals(bookDto.synopsisEs(), mappedBook.getSynopsisEs()),
+                    () -> assertEquals(bookDto.synopsisEn(), mappedBook.getSynopsisEn()),
+                    () -> assertEquals(bookDto.basePrice(), mappedBook.getBasePrice()),
+                    () -> assertEquals(bookDto.discountPercentage(), mappedBook.getDiscountPercentage()),
+                    () -> assertEquals(bookDto.cover(), mappedBook.getCover()),
+                    () -> assertEquals(bookDto.publicationDate(), mappedBook.getPublicationDate()),
+                    () -> assertEquals(bookDto.publisher().name(), mappedBook.getPublisher().getName()),
+                    () -> assertEquals(bookDto.authors().size(), mappedBook.getAuthors().size())
+            );
+        }
+
+        @Test
+        @DisplayName("Given null bookDto should throw BusinessException")
+        void givenNullBookDtoShouldThrowBusinessException() {
+            assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookDtoToBook(null));
+        }
+    }
+}
