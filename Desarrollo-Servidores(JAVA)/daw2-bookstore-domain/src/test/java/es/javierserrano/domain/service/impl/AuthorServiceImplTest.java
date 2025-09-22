@@ -95,20 +95,15 @@ class AuthorServiceImplTest {
             assertThrows(BusinessException.class, () -> authorServiceImpl.create(null));
         }
 
-//        @Test
-//        @DisplayName("CreateAuthorWithoutNameShouldThrowException")
-//        void createAuthorWithoutNameShouldThrowException() {
-//            AuthorDto authorDto = new AuthorDto(
-//                    null,
-//                    authorDtos.get(0).nationality(),
-//                    authorDtos.get(0).biographyEs(),
-//                    authorDtos.get(0).biographyEn(),
-//                    authorDtos.get(0).birthYear(),
-//                    authorDtos.get(0).deathYear(),
-//                    authorDtos.get(0).slug()
-//            );
-//
-//            assertThrows(BusinessException.class, () -> authorServiceImpl.create(authorDto));
+        @Test
+        @DisplayName("CreateAuthorWithExistingSlugShouldThrowException")
+        void createAuthorWithExistingSlugShouldThrowException() {
+            AuthorDto authorDto = authorDtos.get(0);
+            AuthorEntity authorEntity = authorEntities.get(0);
+            when(authorRepository.findBySlug(authorDto.slug())).thenReturn(Optional.of(authorEntity));
+            assertThrows(BusinessException.class, () -> authorServiceImpl.create(authorDto));
+        }
     }
 
+    // Additional tests for update and delete methods can be added similarly
 }

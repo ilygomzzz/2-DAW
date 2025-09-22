@@ -39,6 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDto create(AuthorDto authorDto) {
         if(authorDto == null) throw new BusinessException("Author cannot be null");
+        if(authorRepository.findBySlug(authorDto.slug()).isPresent()) throw new BusinessException("Author with slug " + authorDto.slug() + " already exists");
 
         Author author = AuthorMapper.getInstance().fromAuthorDtoToAuthor(authorDto);
         AuthorEntity authorEntity = AuthorMapper.getInstance().fromAuthorToAuthorEntity(author);
