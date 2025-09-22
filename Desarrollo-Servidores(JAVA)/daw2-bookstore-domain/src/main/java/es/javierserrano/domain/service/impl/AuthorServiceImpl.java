@@ -1,5 +1,6 @@
 package es.javierserrano.domain.service.impl;
 
+import es.javierserrano.domain.exception.BusinessException;
 import es.javierserrano.domain.exception.ResourceNotFoundException;
 import es.javierserrano.domain.mapper.AuthorMapper;
 import es.javierserrano.domain.model.Author;
@@ -37,6 +38,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDto create(AuthorDto authorDto) {
+        if(authorDto == null) throw new BusinessException("Author cannot be null");
+
         Author author = AuthorMapper.getInstance().fromAuthorDtoToAuthor(authorDto);
         AuthorEntity authorEntity = AuthorMapper.getInstance().fromAuthorToAuthorEntity(author);
         AuthorEntity newAuthorEntity = authorRepository.create(authorEntity);
