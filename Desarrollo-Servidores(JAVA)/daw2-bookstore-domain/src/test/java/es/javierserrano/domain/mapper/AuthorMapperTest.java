@@ -2,6 +2,8 @@ package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
 import es.javierserrano.domain.model.Author;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import es.javierserrano.domain.repository.entity.AuthorEntity;
 import es.javierserrano.domain.service.dto.AuthorDto;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +46,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given Author should return AuthorEntity")
         void fromAuthorToAuthorEntityTest() {
-            Author author = new Author("name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
+            Author author = new Author(new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
 
             AuthorEntity authorEntity = AuthorMapper.getInstance().fromAuthorToAuthorEntity(author);
 
@@ -71,7 +73,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given Author should return AuthorDto")
         void fromAuthorToAuthorDtoTest() {
-            Author author = new Author("name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
+            Author author = new Author(new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
 
             var authorDto = AuthorMapper.getInstance().fromAuthorToAuthorDto(author);
 

@@ -1,27 +1,30 @@
 package es.javierserrano.domain.model;
 
-public class Publisher {
-    private String name;
-    private String slug;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 
-    public Publisher(String name, String slug) {
+public class Publisher {
+    private Name name;
+    private Slug slug;
+
+    public Publisher(Name name, Slug slug) {
         this.name = name;
         this.slug = slug;
     }
 
     public String getName() {
-        return name;
+        return name.toString();
     }
 
-    public void setName(String name) {
+    public void setName(Name name) {
         this.name = name;
     }
 
     public String getSlug() {
-        return slug;
+        return slug.toString();
     }
 
-    public void setSlug(String slug) {
+    public void setSlug(Slug slug) {
         this.slug = slug;
     }
 }

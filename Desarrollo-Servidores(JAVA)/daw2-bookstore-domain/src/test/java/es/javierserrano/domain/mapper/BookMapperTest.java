@@ -2,8 +2,12 @@ package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
 import es.javierserrano.domain.model.Author;
-import es.javierserrano.domain.model.Book;
+import es.javierserrano.domain.model.book.BasePrice;
+import es.javierserrano.domain.model.book.Book;
 import es.javierserrano.domain.model.Publisher;
+import es.javierserrano.domain.model.book.Isbn;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import es.javierserrano.domain.repository.entity.AuthorEntity;
 import es.javierserrano.domain.repository.entity.BookEntity;
 import es.javierserrano.domain.repository.entity.PublisherEntity;
@@ -78,22 +82,22 @@ class BookMapperTest {
         @DisplayName("Given book should return bookEntity")
         void givenBookShouldReturnBookEntity() {
             List<Author> authors = List.of(
-                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
-                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
-                    "Editorial Ejemplo",
-                    "País Ejemplo"
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
             );
 
             Book book = new Book(
-                    "1234567890",
+                    new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
                     "Sinopsis en español",
                     "Synopsis in English",
-                    new BigDecimal(20),
+                    new BasePrice(new BigDecimal(20)),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),
@@ -131,22 +135,22 @@ class BookMapperTest {
         @DisplayName("Given book should return bookDto")
         void givenBookShouldReturnBookDto() {
             List<Author> authors = List.of(
-                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
-                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
-                    "Editorial Ejemplo",
-                    "País Ejemplo"
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
             );
 
             Book book = new Book(
-                    "1234567890",
+                    new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
                     "Sinopsis en español",
                     "Synopsis in English",
-                    new BigDecimal(20),
+                    new BasePrice(new BigDecimal(20)),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),
@@ -184,22 +188,22 @@ class BookMapperTest {
         @DisplayName("Given bookDto should return book")
         void givenBookDtoShouldReturnBook() {
             List<Author> authors = List.of(
-                    new Author("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
-                    new Author("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
-                    "Editorial Ejemplo",
-                    "País Ejemplo"
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
             );
 
             Book book = new Book(
-                    "1234567890",
+                    new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
                     "Sinopsis en español",
                     "Synopsis in English",
-                    new BigDecimal(20),
+                    new BasePrice(new BigDecimal(20)),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),

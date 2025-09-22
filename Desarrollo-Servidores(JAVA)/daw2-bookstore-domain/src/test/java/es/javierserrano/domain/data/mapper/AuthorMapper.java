@@ -1,6 +1,8 @@
 package es.javierserrano.domain.data.mapper;
 
 import es.javierserrano.domain.model.Author;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import es.javierserrano.domain.repository.entity.AuthorEntity;
 import es.javierserrano.domain.service.dto.AuthorDto;
 import org.apache.commons.csv.CSVRecord;
@@ -29,13 +31,13 @@ public class AuthorMapper extends BaseMapper{
         }
 
         return new Author(
-                parseString(csvRecord.get("name")),
+                new Name(parseString(csvRecord.get("name"))),
                 parseString(csvRecord.get("nationality")),
                 parseString(csvRecord.get("biography_es")),
                 parseString(csvRecord.get("biography_es")),
                 parseInt(csvRecord.get("birth_year")),
                 parseInt(csvRecord.get("death_year")),
-                parseString(csvRecord.get("slug"))
+                new Slug(parseString(csvRecord.get("slug")))
         );
     }
 

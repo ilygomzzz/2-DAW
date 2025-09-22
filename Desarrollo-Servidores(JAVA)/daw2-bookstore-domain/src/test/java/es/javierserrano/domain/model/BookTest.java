@@ -1,23 +1,77 @@
 package es.javierserrano.domain.model;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.model.book.BasePrice;
+import es.javierserrano.domain.model.book.Book;
+import es.javierserrano.domain.model.book.Isbn;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BookTest {
-    @ParameterizedTest(name = "{index} => basePrice={0}, discountPercentage={1}, expectedPrice={2}")
+
+    @Nested
+    class ConstructorTests {
+        @Test
+        @DisplayName("Given valid parameters should create Book instance")
+        void constructorValidParameters() {
+            Book book = new Book(
+                    new Isbn("978-3-16-148410-0"),
+                    "Título en Español",
+                    "Title in English",
+                    "Sinopsis en Español",
+                    "Synopsis in English",
+                    new BasePrice(new BigDecimal("50.00")),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    new Publisher(new Name("Publisher Name"), new Slug("publisher-name")),
+                    List.of(new Author(new Name("Author Name"), null, null, null, 1980, null, new Slug("author-name")))
+            );
+
+            assertAll(
+                    () -> assertEquals("978-3-16-148410-0", book.getIsbn()),
+                    () -> assertEquals(new BigDecimal("45.00").setScale(2, RoundingMode.HALF_UP), book.getPrice())
+            );
+        }
+
+        @ParameterizedTest(name = "{index} => basePrice={0}, excpected Bussinexception")
+        @DisplayName("Book with null price, 0 or less should throw BusinessException")
+        @NullSource
+        @CsvSource({
+                "0.00",
+                "-5.00"
+        })
+        void constructorInvalidBasePrice(BigDecimal basePrice) {
+            assertThrows(BusinessException.class, () -> new Book(
+                    new Isbn("978-3-16-148410-0"),
+                    "Título en Español",
+                    "Title in English",
+                    "Sinopsis en Español",
+                    "Synopsis in English",
+                    new BasePrice(basePrice),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    null,
+                    null
+            ));
+        }
+    }
+
+    @ParameterizedTest(name = "{index} => BasePrice={0}, discountPercentage={1}, expectedPrice={2}")
     @DisplayName("Calculate final price with various discounts")
     @CsvSource({
             "100.00, 15.0, 85.00",
@@ -27,12 +81,12 @@ class BookTest {
     })
     void calculateFinalPrice(BigDecimal basePrice, double discountPercentage, BigDecimal expectedPrice) {
         Book book = new Book(
-                "978-3-16-148410-0",
+                new Isbn("978-3-16-148410-0"),
                 "Título en Español",
                 "Title in English",
                 "Sinopsis en Español",
                 "Synopsis in English",
-                basePrice,
+                new BasePrice(basePrice),
                 discountPercentage,
                 "cover.jpg",
                 LocalDate.of(2023, 1, 1),
@@ -50,16 +104,16 @@ class BookTest {
         @DisplayName("Add Author to Book")
         void addAuthorToBook() {
             List<Author> authors = List.of(
-                    new Author("Existing Author", null, null, null, 1900, null, null)
+                    new Author(new Name("Existing Author"), null, null, null, 1900, null, new Slug("existing-author"))
             );
 
             Book book = new Book(
-                    "978-3-16-148410-0",
+                    new Isbn("978-3-16-148410-0"),
                     "Título en Español",
                     "Title in English",
                     "Sinopsis en Español",
                     "Synopsis in English",
-                    new BigDecimal("50.00"),
+                    new BasePrice(new BigDecimal("50.00")),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),
@@ -67,7 +121,7 @@ class BookTest {
                     authors
             );
 
-            Author author = new Author("Existing Author 2", null, null, null, 1900, null, null);
+            Author author = new Author(new Name("Existing Author 2"), null, null, null, 1900, null, new Slug("existing-author"));
 
             book.addAuthor(author);
             assertTrue(book.getAuthors().contains(author), "Book should contain the added author");
@@ -77,12 +131,12 @@ class BookTest {
         @DisplayName("Add Author to Book with null Authors list")
         void addAuthorToBookWithNullAuthors() {
             Book book = new Book(
-                    "978-3-16-148410-0",
+                    new Isbn("978-3-16-148410-0"),
                     "Título en Español",
                     "Title in English",
                     "Sinopsis en Español",
                     "Synopsis in English",
-                    new BigDecimal("50.00"),
+                    new BasePrice(new BigDecimal("50.00")),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),
@@ -90,36 +144,36 @@ class BookTest {
                     null
             );
             Author author = new Author(
-                    "Author Name",
+                    new Name("Author Name"),
                     "nationality",
                     "BioEs",
                     "BioEn",
                     1980,
                     null,
-                    "slug");
+                    new Slug("slug"));
             book.addAuthor(author);
             assertTrue(book.getAuthors().contains(author), "Book should contain the added author");
         }
 
         @Test
-        @DisplayName("Add existing Author to Book")
+        @DisplayName("Add existing Author to Book should throw BusinessException")
         void addExistingAuthorToBook() {
             Author author = new Author(
-                    "Author Name",
+                    new Name("Author Name"),
                     "nationality",
                     "BioEs",
                     "BioEn",
                     1980,
                     null,
-                    "slug");
+                    new Slug("slug"));
 
             Book book = new Book(
-                    "978-3-16-148410-0",
+                    new Isbn("978-3-16-148410-0"),
                     "Título en Español",
                     "Title in English",
                     "Sinopsis en Español",
                     "Synopsis in English",
-                    new BigDecimal("50.00"),
+                    new BasePrice(new BigDecimal("50.00")),
                     10.0,
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),

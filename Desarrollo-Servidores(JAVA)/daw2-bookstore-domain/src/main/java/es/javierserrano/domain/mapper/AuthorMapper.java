@@ -2,6 +2,8 @@ package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
 import es.javierserrano.domain.model.Author;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import es.javierserrano.domain.repository.entity.AuthorEntity;
 import es.javierserrano.domain.service.dto.AuthorDto;
 
@@ -22,13 +24,13 @@ public class AuthorMapper {
             throw new BusinessException("AuthorEntity cannot be null");
         }
         return new Author(
-                authorEntity.name(),
+                new Name(authorEntity.name()),
                 authorEntity.nationality(),
                 authorEntity.biographyEs(),
                 authorEntity.biographyEn(),
                 authorEntity.birthYear(),
                 authorEntity.deathYear(),
-                authorEntity.slug()
+                new Slug(authorEntity.slug())
         );
     }
 
@@ -70,13 +72,13 @@ public class AuthorMapper {
         }
 
         return new Author(
-                authorDto.name(),
+                new Name(authorDto.name()),
                 authorDto.nationality(),
                 authorDto.biographyEs(),
                 authorDto.biographyEn(),
                 authorDto.birthYear(),
                 authorDto.deathYear(),
-                authorDto.slug()
+                new Slug(authorDto.slug())
         );
     }
 }

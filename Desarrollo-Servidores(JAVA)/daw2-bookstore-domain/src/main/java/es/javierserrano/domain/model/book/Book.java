@@ -1,6 +1,8 @@
-package es.javierserrano.domain.model;
+package es.javierserrano.domain.model.book;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.model.Author;
+import es.javierserrano.domain.model.Publisher;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,12 +12,12 @@ import java.util.List;
 
 public class Book {
 
-    private String isbn;
+    private Isbn isbn;
     private String titleEs;
     private String titleEn;
     private String synopsisEs;
     private String synopsisEn;
-    private BigDecimal basePrice;
+    private BasePrice basePrice;
     private double discountPercentage;
     private BigDecimal price;
     private String cover;
@@ -24,12 +26,12 @@ public class Book {
     private List<Author> authors;
 
     public Book(
-            String isbn,
+            Isbn isbn,
             String titleEs,
             String titleEn,
             String synopsisEs,
             String synopsisEn,
-            BigDecimal basePrice,
+            BasePrice basePrice,
             double discountPercentage,
             String cover,
             LocalDate publicationDate,
@@ -51,10 +53,10 @@ public class Book {
     }
 
     public String getIsbn() {
-        return isbn;
+        return isbn.toString();
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(Isbn isbn) {
         this.isbn = isbn;
     }
 
@@ -91,10 +93,10 @@ public class Book {
     }
 
     public BigDecimal getBasePrice() {
-        return basePrice;
+        return basePrice.getValue();
     }
 
-    public void setBasePrice(BigDecimal basePrice) {
+    public void setBasePrice(BasePrice basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -127,15 +129,15 @@ public class Book {
     }
 
     public BigDecimal calculateFinalPrice() {
-        BigDecimal discount = basePrice
+        BigDecimal discount = basePrice.getValue()
                 .multiply(BigDecimal.valueOf(discountPercentage))
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
         if (discount.compareTo(BigDecimal.ZERO) <= 0) {
-            return basePrice.setScale(2, RoundingMode.HALF_UP);
+            return basePrice.getValue().setScale(2, RoundingMode.HALF_UP);
         }
 
-        return basePrice.subtract(discount).setScale(2, RoundingMode.HALF_UP);
+        return basePrice.getValue().subtract(discount).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Publisher getPublisher() {

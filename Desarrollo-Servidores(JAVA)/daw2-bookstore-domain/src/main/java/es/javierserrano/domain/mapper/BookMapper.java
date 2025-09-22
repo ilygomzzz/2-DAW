@@ -1,7 +1,9 @@
 package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
-import es.javierserrano.domain.model.Book;
+import es.javierserrano.domain.model.book.BasePrice;
+import es.javierserrano.domain.model.book.Book;
+import es.javierserrano.domain.model.book.Isbn;
 import es.javierserrano.domain.repository.entity.BookEntity;
 import es.javierserrano.domain.service.dto.BookDto;
 
@@ -24,12 +26,12 @@ public class BookMapper {
         }
 
         return new Book(
-                bookEntity.isbn(),
+                new Isbn(bookEntity.isbn()),
                 bookEntity.titleEs(),
                 bookEntity.titleEn(),
                 bookEntity.synopsisEs(),
                 bookEntity.synopsisEn(),
-                bookEntity.basePrice(),
+                new BasePrice(bookEntity.basePrice()),
                 bookEntity.discountPercentage(),
                 bookEntity.cover(),
                 bookEntity.publicationDate(),
@@ -84,12 +86,12 @@ public class BookMapper {
             throw new BusinessException("BookDto cannot be null");
         }
         return new Book(
-                bookDto.isbn(),
+                new Isbn(bookDto.isbn()),
                 bookDto.titleEs(),
                 bookDto.titleEn(),
                 bookDto.synopsisEs(),
                 bookDto.synopsisEn(),
-                bookDto.basePrice(),
+                new BasePrice(bookDto.basePrice()),
                 bookDto.discountPercentage(),
                 bookDto.cover(),
                 bookDto.publicationDate(),

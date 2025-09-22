@@ -2,6 +2,8 @@ package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
 import es.javierserrano.domain.model.Publisher;
+import es.javierserrano.domain.model.shared.Name;
+import es.javierserrano.domain.model.shared.Slug;
 import es.javierserrano.domain.repository.entity.PublisherEntity;
 import es.javierserrano.domain.service.dto.PublisherDto;
 
@@ -24,8 +26,8 @@ public class PublisherMapper {
         }
 
         return new Publisher(
-                publisherEntity.name(),
-                publisherEntity.slug()
+                new Name(publisherEntity.name()),
+                new Slug(publisherEntity.slug())
         );
     }
 
@@ -55,8 +57,8 @@ public class PublisherMapper {
             throw new BusinessException("PublisherDto cannot be null");
         }
         return new Publisher(
-                publisherDto.name(),
-                publisherDto.slug()
+                new Name(publisherDto.name()),
+                new Slug(publisherDto.slug())
         );
     }
 }
