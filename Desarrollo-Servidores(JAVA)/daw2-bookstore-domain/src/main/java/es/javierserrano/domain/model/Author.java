@@ -4,7 +4,7 @@ import es.javierserrano.domain.model.shared.Name;
 import es.javierserrano.domain.model.shared.Slug;
 
 public class Author {
-
+    private Long id;
     private Name name;
     private String nationality;
     private String biographyEs;
@@ -13,7 +13,8 @@ public class Author {
     private Integer deathYear;
     private Slug slug;
 
-    public Author(Name name, String nationality, String biographyEs, String biographyEn, int birthYear, Integer deathYear, Slug slug) {
+    public Author(Long id, Name name, String nationality, String biographyEs, String biographyEn, int birthYear, Integer deathYear, Slug slug) {
+        this.id = id;
         this.name = name;
         this.nationality = nationality;
         this.biographyEs = biographyEs;
@@ -23,6 +24,13 @@ public class Author {
         this.slug = slug;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name.toString();

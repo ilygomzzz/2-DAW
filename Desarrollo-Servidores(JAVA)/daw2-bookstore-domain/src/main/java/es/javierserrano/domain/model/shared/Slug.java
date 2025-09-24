@@ -2,37 +2,38 @@ package es.javierserrano.domain.model.shared;
 
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.exception.ValidationException;
 
 import java.util.Objects;
 
 public final class Slug {
-    private final String value;
+    private final String slug;
 
     public Slug(String value) {
-        if (value == null || !value.matches("^[a-z0-9]+(?:-[a-z0-9]+)*$") || value.trim().isEmpty()) {
-            throw new BusinessException("Slug inválido");
+        if (value == null || value.trim().isEmpty()) {
+            throw new ValidationException("Slug inválido");
         }
-        this.value = value;
+        this.slug = value;
     }
 
-    public String value() {
-        return value;
+    public String getSlug() {
+        return slug;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Slug slug)) return false;
-        return value.equals(slug.value);
+        return this.slug.equals(slug.slug);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(slug);
     }
 
     @Override
     public String toString() {
-        return value;
+        return slug;
     }
 }

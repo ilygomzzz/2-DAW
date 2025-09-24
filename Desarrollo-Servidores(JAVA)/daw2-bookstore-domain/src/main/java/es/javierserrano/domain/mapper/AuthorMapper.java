@@ -24,6 +24,7 @@ public class AuthorMapper {
             throw new BusinessException("AuthorEntity cannot be null");
         }
         return new Author(
+                authorEntity.id(),
                 new Name(authorEntity.name()),
                 authorEntity.nationality(),
                 authorEntity.biographyEs(),
@@ -40,6 +41,7 @@ public class AuthorMapper {
         }
 
         return new AuthorEntity(
+                author.getId(),
                 author.getName(),
                 author.getNationality(),
                 author.getBiographyEs(),
@@ -56,6 +58,7 @@ public class AuthorMapper {
         }
 
         return new AuthorDto(
+                author.getId(),
                 author.getName(),
                 author.getNationality(),
                 author.getBiographyEs(),
@@ -72,6 +75,7 @@ public class AuthorMapper {
         }
 
         return new Author(
+                authorDto.id(),
                 new Name(authorDto.name()),
                 authorDto.nationality(),
                 authorDto.biographyEs(),

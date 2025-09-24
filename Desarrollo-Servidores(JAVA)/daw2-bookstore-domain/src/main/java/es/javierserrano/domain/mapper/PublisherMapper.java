@@ -26,6 +26,7 @@ public class PublisherMapper {
         }
 
         return new Publisher(
+                publisherEntity.id(),
                 new Name(publisherEntity.name()),
                 new Slug(publisherEntity.slug())
         );
@@ -37,6 +38,7 @@ public class PublisherMapper {
         }
 
         return new PublisherEntity(
+                publisher.getId(),
                 publisher.getName(),
                 publisher.getSlug()
         );
@@ -47,6 +49,7 @@ public class PublisherMapper {
             throw new BusinessException("Publisher cannot be null");
         }
         return new PublisherDto(
+                publisher.getId(),
                 publisher.getName(),
                 publisher.getSlug()
         );
@@ -57,6 +60,7 @@ public class PublisherMapper {
             throw new BusinessException("PublisherDto cannot be null");
         }
         return new Publisher(
+                publisherDto.id(),
                 new Name(publisherDto.name()),
                 new Slug(publisherDto.slug())
         );

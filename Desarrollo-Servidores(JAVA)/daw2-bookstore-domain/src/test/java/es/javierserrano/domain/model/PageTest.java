@@ -25,6 +25,7 @@ class PageTest {
         void testValidationDataSize() {
             List<Book> data = List.of(
                     new Book(
+                            4L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -49,6 +50,7 @@ class PageTest {
         void testValidationDataSizeEqualsPageSize() {
             List<Book> data = List.of(
                     new Book(
+                            5L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -73,6 +75,7 @@ class PageTest {
         void testValidationDataSizeGreaterThanPageSizeShouldThrowBusinessException() {
             List<Book> data = List.of(
                     new Book(
+                            6L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -86,6 +89,7 @@ class PageTest {
                             null
                     ),
                     new Book(
+                            2L,
                             new Isbn("978-3-16-148412-0"),
                             "Título en Español",
                             "Title in English",
@@ -113,6 +117,7 @@ class PageTest {
         void testValidationPageNumberGreaterThan0ShouldReturnPageNumber() {
             List<Book> data = List.of(
                     new Book(
+                            1L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -137,6 +142,7 @@ class PageTest {
         void testValidationPageNumberSmallerThan0ShouldThrowBusinessException() {
             List<Book> data = List.of(
                     new Book(
+                            1L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -164,6 +170,7 @@ class PageTest {
         void testValidationPageNumberGreaterThan0ShouldReturnPageNumber() {
             List<Book> data = List.of(
                     new Book(
+                            1L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",
@@ -188,6 +195,7 @@ class PageTest {
         void testValidationPageNumberSmallerThan0ShouldThrowBusinessException() {
             List<Book> data = List.of(
                     new Book(
+                            2L,
                             new Isbn("978-3-16-148410-0"),
                             "Título en Español",
                             "Title in English",

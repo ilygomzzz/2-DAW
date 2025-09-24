@@ -1,37 +1,38 @@
 package es.javierserrano.domain.model.shared;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.exception.ValidationException;
 
 import java.util.Objects;
 
 public final class Name {
-    private final String value;
+    private final String name;
 
-    public Name(String value) {
-        if(value == null || value.isBlank() || value.trim().isEmpty()){
-            throw new BusinessException("El nombre no puede estar vacio");
+    public Name(String name) {
+        if(name == null || name.isBlank() || name.trim().isEmpty()){
+            throw new ValidationException("El nombre no puede estar vacio");
         }
-        this.value = value;
+        this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Name name)) return false;
-        return value.equals(name.value);
+        return this.name.equals(name.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
-        return value;
+        return name;
     }
 }

@@ -1,6 +1,7 @@
 package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.exception.ValidationException;
 import es.javierserrano.domain.model.book.BasePrice;
 import es.javierserrano.domain.model.book.Book;
 import es.javierserrano.domain.model.book.Isbn;
@@ -22,22 +23,30 @@ public class BookMapper {
 
     public Book fromBookEntityToBook(BookEntity bookEntity) {
         if (bookEntity == null) {
-            throw new BusinessException("BookEntity cannot be null");
+           return null;
         }
 
-        return new Book(
-                new Isbn(bookEntity.isbn()),
-                bookEntity.titleEs(),
-                bookEntity.titleEn(),
-                bookEntity.synopsisEs(),
-                bookEntity.synopsisEn(),
-                new BasePrice(bookEntity.basePrice()),
-                bookEntity.discountPercentage(),
-                bookEntity.cover(),
-                bookEntity.publicationDate(),
-                PublisherMapper.getInstance().fromPublisherEntityToPublisher(bookEntity.publisher()),
-                bookEntity.authors().stream().map(AuthorMapper.getInstance()::fromAuthorEntityToAuthor).toList()
-        );
+        try{
+            Book book = new Book(
+                    bookEntity.id(),
+                    new Isbn(bookEntity.isbn()),
+                    bookEntity.titleEs(),
+                    bookEntity.titleEn(),
+                    bookEntity.synopsisEs(),
+                    bookEntity.synopsisEn(),
+                    new BasePrice(bookEntity.basePrice()),
+                    bookEntity.discountPercentage(),
+                    bookEntity.cover(),
+                    bookEntity.publicationDate(),
+                    PublisherMapper.getInstance().fromPublisherEntityToPublisher(bookEntity.publisher()),
+                    bookEntity.authors().stream().map(AuthorMapper.getInstance()::fromAuthorEntityToAuthor).toList()
+            );
+
+            return book;
+        } catch(ValidationException e){
+            return null;
+        }
+
     }
 
     public BookEntity fromBookToBookEntity(Book book) {
@@ -46,6 +55,7 @@ public class BookMapper {
         }
 
         return new BookEntity(
+                book.getId(),
                 book.getIsbn(),
                 book.getTitleEs(),
                 book.getTitleEn(),
@@ -66,6 +76,7 @@ public class BookMapper {
         }
 
         return new BookDto(
+                book.getId(),
                 book.getIsbn(),
                 book.getTitleEs(),
                 book.getTitleEn(),
@@ -86,6 +97,7 @@ public class BookMapper {
             throw new BusinessException("BookDto cannot be null");
         }
         return new Book(
+                bookDto.id(),
                 new Isbn(bookDto.isbn()),
                 bookDto.titleEs(),
                 bookDto.titleEn(),

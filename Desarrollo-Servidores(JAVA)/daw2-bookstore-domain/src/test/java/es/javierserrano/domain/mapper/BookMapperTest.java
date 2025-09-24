@@ -29,17 +29,19 @@ class BookMapperTest {
         @DisplayName("Given bookEntity should return book")
         void givenBookEntityShouldReturnBook() {
             PublisherEntity publisherEntity = new PublisherEntity(
+                    1L,
                     "Editorial Ejemplo",
                     "País Ejemplo"
             );
 
             List<AuthorEntity> authorsEntity = List.of(
-                    new AuthorEntity("Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
-                    new AuthorEntity("Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+                    new AuthorEntity(1L,"Autor Uno", "Nacionalidad Uno", null, null, 1950, null,  "asdf"),
+                    new AuthorEntity(2L,"Autor Dos", "Nacionalidad Dos", null, null, 1960, null, "assdg")
             );
 
             BookEntity bookEntity = new BookEntity(
-                    "1234567890",
+                    1L,
+                    "978-3-16-148410-0",
                     "Título en español",
                     "Title in English",
                     "Sinopsis en español",
@@ -55,6 +57,7 @@ class BookMapperTest {
             Book book = BookMapper.getInstance().fromBookEntityToBook(bookEntity);
 
             assertAll(
+                    () -> assertEquals(bookEntity.id(), book.getId()),
                     () -> assertEquals(bookEntity.isbn(), book.getIsbn()),
                     () -> assertEquals(bookEntity.titleEs(), book.getTitleEs()),
                     () -> assertEquals(bookEntity.titleEn(), book.getTitleEn()),
@@ -71,8 +74,40 @@ class BookMapperTest {
 
         @Test
         @DisplayName("Given null bookEntity should throw BusinessException")
-        void givenNullBookEntityShouldThrowBusinessException() {
-            assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookEntityToBook(null));
+        void givenNullBookEntityShouldReturnNull() {
+           assertNull(BookMapper.getInstance().fromBookEntityToBook(null));
+        }
+
+        @Test
+        @DisplayName("Given bookEntity without isbn should return null")
+        void  givenBookEntityWhitoutIsbnShouldReturnNull() {
+            PublisherEntity publisherEntity = new PublisherEntity(
+                    1L,
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            List<AuthorEntity> authorsEntity = List.of(
+                    new AuthorEntity(1L,"Autor Uno", "Nacionalidad Uno", null, null, 1950, null, null),
+                    new AuthorEntity(2L,"Autor Dos", "Nacionalidad Dos", null, null, 1960, null, null)
+            );
+
+            BookEntity bookEntity = new BookEntity(
+                    1L,
+                    null,
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisherEntity,
+                    authorsEntity
+            );
+
+            assertNull(BookMapper.getInstance().fromBookEntityToBook(bookEntity));
         }
     }
 
@@ -82,16 +117,18 @@ class BookMapperTest {
         @DisplayName("Given book should return bookEntity")
         void givenBookShouldReturnBookEntity() {
             List<Author> authors = List.of(
-                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
-                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
+                    new Author(1L, new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(2L, new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
+                    1L,
                     new Name("Editorial Ejemplo"),
                     new Slug("País Ejemplo")
             );
 
             Book book = new Book(
+                    2L,
                     new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
@@ -108,6 +145,7 @@ class BookMapperTest {
             BookEntity bookEntity = BookMapper.getInstance().fromBookToBookEntity(book);
 
             assertAll(
+                    () -> assertEquals(book.getId(), bookEntity.id()),
                     () -> assertEquals(book.getIsbn(), bookEntity.isbn()),
                     () -> assertEquals(book.getTitleEs(), bookEntity.titleEs()),
                     () -> assertEquals(book.getTitleEn(), bookEntity.titleEn()),
@@ -135,16 +173,18 @@ class BookMapperTest {
         @DisplayName("Given book should return bookDto")
         void givenBookShouldReturnBookDto() {
             List<Author> authors = List.of(
-                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
-                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
+                    new Author(1L, new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(2L, new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
+                    1L,
                     new Name("Editorial Ejemplo"),
                     new Slug("País Ejemplo")
             );
 
             Book book = new Book(
+                    3L,
                     new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
@@ -161,6 +201,7 @@ class BookMapperTest {
             var bookDto = BookMapper.getInstance().fromBookToBookDto(book);
 
             assertAll(
+                    () -> assertEquals(book.getId(), bookDto.id()),
                     () -> assertEquals(book.getIsbn(), bookDto.isbn()),
                     () -> assertEquals(book.getTitleEs(), bookDto.titleEs()),
                     () -> assertEquals(book.getTitleEn(), bookDto.titleEn()),
@@ -188,16 +229,18 @@ class BookMapperTest {
         @DisplayName("Given bookDto should return book")
         void givenBookDtoShouldReturnBook() {
             List<Author> authors = List.of(
-                    new Author(new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
-                    new Author(new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
+                    new Author(1L, new Name("Autor Uno"), "Nacionalidad Uno", null, null, 1950, null, new Slug("prueba-1")),
+                    new Author(2L, new Name("Autor Dos"), "Nacionalidad Dos", null, null, 1960, null, new Slug("prueba-2"))
             );
 
             Publisher publisher = new Publisher(
+                    2L,
                     new Name("Editorial Ejemplo"),
                     new Slug("País Ejemplo")
             );
 
             Book book = new Book(
+                    4L,
                     new Isbn("1234567890"),
                     "Título en español",
                     "Title in English",
@@ -215,6 +258,7 @@ class BookMapperTest {
             var mappedBook = BookMapper.getInstance().fromBookDtoToBook(bookDto);
 
             assertAll(
+                    () -> assertEquals(bookDto.id(), mappedBook.getId()),
                     () -> assertEquals(bookDto.isbn(), mappedBook.getIsbn()),
                     () -> assertEquals(bookDto.titleEs(), mappedBook.getTitleEs()),
                     () -> assertEquals(bookDto.titleEn(), mappedBook.getTitleEn()),

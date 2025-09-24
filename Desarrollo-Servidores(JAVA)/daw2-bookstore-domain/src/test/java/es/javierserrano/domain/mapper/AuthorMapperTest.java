@@ -19,7 +19,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given AuthorEntity should return Author")
         void fromAuthorEntityToAuthorTest() {
-            AuthorEntity authorEntity = new AuthorEntity("name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
+            AuthorEntity authorEntity = new AuthorEntity(1L, "name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
 
             Author author = AuthorMapper.getInstance().fromAuthorEntityToAuthor(authorEntity);
 
@@ -46,7 +46,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given Author should return AuthorEntity")
         void fromAuthorToAuthorEntityTest() {
-            Author author = new Author(new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
+            Author author = new Author(1L, new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
 
             AuthorEntity authorEntity = AuthorMapper.getInstance().fromAuthorToAuthorEntity(author);
 
@@ -73,7 +73,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given Author should return AuthorDto")
         void fromAuthorToAuthorDtoTest() {
-            Author author = new Author(new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
+            Author author = new Author(1L, new Name("name"), "nationality", "biographyEs", "biographyEn", 1990, 2020, new Slug("slug"));
 
             var authorDto = AuthorMapper.getInstance().fromAuthorToAuthorDto(author);
 
@@ -100,7 +100,7 @@ class AuthorMapperTest {
         @Test
         @DisplayName("Given AuthorDto should return Author")
         void fromAuthorDtoToAuthorTest() {
-            var authorDto = new AuthorDto("name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
+            var authorDto = new AuthorDto(1L, "name", "nationality", "biographyEs", "biographyEn", 1990, 2020, "slug");
             Author author = AuthorMapper.getInstance().fromAuthorDtoToAuthor(authorDto);
             assertAll(
                     () -> assertEquals(authorDto.name(), author.getName()),

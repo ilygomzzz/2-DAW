@@ -105,5 +105,17 @@ class AuthorServiceImplTest {
         }
     }
 
+    @Nested
+    class UpdateAuthorTests {
+        @Test
+        @DisplayName("UpdateShouldUpdateAuthorDto")
+        void updateShouldUpdateAuthorDto() {
+            AuthorDto authorDto = authorDtos.get(0);
+            AuthorEntity authorEntity = authorEntities.get(0);
+
+
+        }
+    }
+
     // Additional tests for update and delete methods can be added similarly
 }

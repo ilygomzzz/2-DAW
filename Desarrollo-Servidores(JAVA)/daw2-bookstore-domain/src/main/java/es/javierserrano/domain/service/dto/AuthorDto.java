@@ -1,6 +1,7 @@
 package es.javierserrano.domain.service.dto;
 
 public record AuthorDto (
+        Long id,
         String name,
         String nationality,
         String biographyEs,
