@@ -1,6 +1,7 @@
 package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.exception.ValidationException;
 import es.javierserrano.domain.model.Author;
 import es.javierserrano.domain.model.shared.Name;
 import es.javierserrano.domain.model.shared.Slug;
@@ -21,23 +22,27 @@ public class AuthorMapper {
 
     public Author fromAuthorEntityToAuthor(AuthorEntity authorEntity) {
         if (authorEntity == null) {
-            throw new BusinessException("AuthorEntity cannot be null");
+            return null;
         }
-        return new Author(
-                authorEntity.id(),
-                new Name(authorEntity.name()),
-                authorEntity.nationality(),
-                authorEntity.biographyEs(),
-                authorEntity.biographyEn(),
-                authorEntity.birthYear(),
-                authorEntity.deathYear(),
-                new Slug(authorEntity.slug())
-        );
+        try {
+            return new Author(
+                    authorEntity.id(),
+                    new Name(authorEntity.name()),
+                    authorEntity.nationality(),
+                    authorEntity.biographyEs(),
+                    authorEntity.biographyEn(),
+                    authorEntity.birthYear(),
+                    authorEntity.deathYear(),
+                    new Slug(authorEntity.slug())
+            );
+        } catch (ValidationException e) {
+            return null;
+        }
     }
 
     public AuthorEntity fromAuthorToAuthorEntity(Author author) {
         if (author == null) {
-            throw new BusinessException("Author cannot be null");
+            return null;
         }
 
         return new AuthorEntity(
@@ -54,7 +59,7 @@ public class AuthorMapper {
 
     public AuthorDto fromAuthorToAuthorDto(Author author) {
         if (author == null) {
-            throw new BusinessException("Author cannot be null");
+            return null;
         }
 
         return new AuthorDto(
@@ -71,7 +76,7 @@ public class AuthorMapper {
 
     public Author fromAuthorDtoToAuthor(AuthorDto authorDto) {
         if (authorDto == null) {
-            throw new BusinessException("AuthorDto cannot be null");
+            return null;
         }
 
         return new Author(

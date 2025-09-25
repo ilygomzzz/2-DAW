@@ -51,7 +51,7 @@ class BookMapperTest {
                     "cover.jpg",
                     LocalDate.of(2023, 1, 1),
                     publisherEntity,
-                    authorsEntity
+                    null
             );
 
             Book book = BookMapper.getInstance().fromBookEntityToBook(bookEntity);
@@ -68,7 +68,7 @@ class BookMapperTest {
                     () -> assertEquals(bookEntity.cover(), book.getCover()),
                     () -> assertEquals(bookEntity.publicationDate(), book.getPublicationDate()),
                     () -> assertEquals(bookEntity.publisher().name(), book.getPublisher().getName()),
-                    () -> assertEquals(bookEntity.authors().size(), book.getAuthors().size())
+                    () -> assertEquals(bookEntity.authors(), book.getAuthors().size())
             );
         }
 
@@ -108,6 +108,37 @@ class BookMapperTest {
             );
 
             assertNull(BookMapper.getInstance().fromBookEntityToBook(bookEntity));
+        }
+
+        @Test
+        @DisplayName("Given bookEntity without authos should return book with empty authors")
+        void givenBookEntityWithoutAuthosShouldReturnBookWithEmptyAuthors() {
+            PublisherEntity publisherEntity = new PublisherEntity(
+                    1L,
+                    "Editorial Ejemplo",
+                    "País Ejemplo"
+            );
+
+            BookEntity bookEntity = new BookEntity(
+                    1L,
+                    "978-3-16-148410-0",
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BigDecimal(20),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisherEntity,
+                    null
+            );
+
+            Book book = BookMapper.getInstance().fromBookEntityToBook(bookEntity);
+            assertAll(
+                    () -> assertEquals(bookEntity.id(), book.getId()),
+                    () -> assertTrue(book.getAuthors().isEmpty())
+            );
         }
     }
 
@@ -165,6 +196,37 @@ class BookMapperTest {
         void givenNullBookShouldThrowBusinessException() {
             assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookToBookEntity(null));
         }
+
+        @Test
+        @DisplayName("Given book without authors should return bookEntity with empty authors")
+        void  givenBookWithoutAuthorsShouldReturnBookEntityWithEmptyAuthors() {
+            Publisher publisher = new Publisher(
+                    1L,
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
+            );
+
+            Book book = new Book(
+                    2L,
+                    new Isbn("1234567890"),
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BasePrice(new BigDecimal(20)),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    null
+            );
+
+            BookEntity bookEntity = BookMapper.getInstance().fromBookToBookEntity(book);
+            assertAll(
+                    () -> assertEquals(book.getId(), bookEntity.id()),
+                    () -> assertTrue(bookEntity.authors().isEmpty())
+            );
+        }
     }
 
     @Nested
@@ -220,6 +282,35 @@ class BookMapperTest {
         @DisplayName("Given null book should throw BusinessException")
         void givenNullBookShouldThrowBusinessException() {
             assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookToBookDto(null));
+        }
+
+        @Test
+        @DisplayName("Given book without authors should return bookDto with empty authors")
+        void givenBookWithoutAuthorsShouldReturnBookDtoWithEmptyAuthors() {
+            Publisher publisher = new Publisher(
+                    1L,
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
+            );
+            Book book = new Book(
+                    3L,
+                    new Isbn("1234567890"),
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BasePrice(new BigDecimal(20)),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    null
+            );
+            var bookDto = BookMapper.getInstance().fromBookToBookDto(book);
+            assertAll(
+                    () -> assertEquals(book.getId(), bookDto.id()),
+                    () -> assertTrue(bookDto.authors().isEmpty())
+            );
         }
     }
 
@@ -278,5 +369,34 @@ class BookMapperTest {
         void givenNullBookDtoShouldThrowBusinessException() {
             assertThrows(BusinessException.class, () -> BookMapper.getInstance().fromBookDtoToBook(null));
         }
+
+        @Test
+        @DisplayName("Given bookDto without authors should return book with empty authors")
+        void givenBookDtoWithoutAuthorsShouldReturnBookWithEmptyAuthors() {
+            Publisher publisher = new Publisher(
+                    2L,
+                    new Name("Editorial Ejemplo"),
+                    new Slug("País Ejemplo")
+            );
+            Book book = new Book(
+                    4L,
+                    new Isbn("1234567890"),
+                    "Título en español",
+                    "Title in English",
+                    "Sinopsis en español",
+                    "Synopsis in English",
+                    new BasePrice(new BigDecimal(20)),
+                    10.0,
+                    "cover.jpg",
+                    LocalDate.of(2023, 1, 1),
+                    publisher,
+                    null
+            );
+            var bookDto = BookMapper.getInstance().fromBookToBookDto(book);
+            var mappedBook = BookMapper.getInstance().fromBookDtoToBook(bookDto);
+            assertAll(
+                    () -> assertEquals(bookDto.id(), mappedBook.getId()),
+                    () -> assertTrue(mappedBook.getAuthors().isEmpty())
+            );
     }
 }

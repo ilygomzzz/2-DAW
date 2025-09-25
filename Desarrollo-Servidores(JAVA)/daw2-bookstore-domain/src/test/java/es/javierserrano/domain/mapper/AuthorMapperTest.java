@@ -1,6 +1,7 @@
 package es.javierserrano.domain.mapper;
 
 import es.javierserrano.domain.exception.BusinessException;
+import es.javierserrano.domain.exception.ValidationException;
 import es.javierserrano.domain.model.Author;
 import es.javierserrano.domain.model.shared.Name;
 import es.javierserrano.domain.model.shared.Slug;
@@ -35,9 +36,23 @@ class AuthorMapperTest {
         }
 
         @Test
-        @DisplayName("Given null AuthorEntity should throw BusinessException")
+        @DisplayName("Given null AuthorEntity should return null")
         void fromAuthorEntityToAuthorNullTest() {
-            assertThrows(BusinessException.class, () -> AuthorMapper.getInstance().fromAuthorEntityToAuthor(null));
+            assertNull(AuthorMapper.getInstance().fromAuthorEntityToAuthor(null));
+        }
+
+        @Test
+        @DisplayName("Given AuthorEntity with null name should return null")
+        void fromAuthorEntityToAuthorWithNullNameTest() {
+            AuthorEntity authorEntity = new AuthorEntity(1L, null, "cualquiera", null, null, 0, null, "asdfa");
+            assertNull(AuthorMapper.getInstance().fromAuthorEntityToAuthor(authorEntity));
+        }
+
+        @Test
+        @DisplayName("Given AuthorEntity with null slug should return null")
+        void fromAuthorEntityToAuthorWithNullSlugTest() {
+            AuthorEntity authorEntity = new AuthorEntity(1L, "asdfa", "cualquiera", null, null, 0, null, null);
+            assertNull(AuthorMapper.getInstance().fromAuthorEntityToAuthor(authorEntity));
         }
     }
 
@@ -62,9 +77,9 @@ class AuthorMapperTest {
         }
 
         @Test
-        @DisplayName("Given null Author should throw BusinessException")
+        @DisplayName("Given null Author should return null")
         void fromAuthorToAuthorEntityNullTest() {
-            assertThrows(BusinessException.class, () -> AuthorMapper.getInstance().fromAuthorToAuthorEntity(null));
+            assertNull(AuthorMapper.getInstance().fromAuthorToAuthorEntity(null));
         }
     }
 
@@ -89,9 +104,9 @@ class AuthorMapperTest {
         }
 
         @Test
-        @DisplayName("Given null Author should throw BusinessException")
+        @DisplayName("Given null Author should return null")
         void fromAuthorToAuthorDtoNullTest() {
-            assertThrows(BusinessException.class, () -> AuthorMapper.getInstance().fromAuthorToAuthorDto(null));
+            assertNull(AuthorMapper.getInstance().fromAuthorToAuthorDto(null));
         }
     }
 
@@ -114,9 +129,23 @@ class AuthorMapperTest {
         }
 
         @Test
-        @DisplayName("Given null AuthorDto should throw BusinessException")
+        @DisplayName("Given null AuthorDto should return null")
         void fromAuthorDtoToAuthorNullTest() {
-            assertThrows(BusinessException.class, () -> AuthorMapper.getInstance().fromAuthorDtoToAuthor(null));
+            assertNull(AuthorMapper.getInstance().fromAuthorDtoToAuthor(null));
+        }
+
+        @Test
+        @DisplayName("Given AuthorDto with null name should throw ValidationException")
+        void fromAuthorDtoToAuthorWithNullNameTest() {
+            var authorDto = new AuthorDto(1L, null, "cualquiera", null, null, 0, null, "asdfa");
+            assertThrows(ValidationException.class, () -> AuthorMapper.getInstance().fromAuthorDtoToAuthor(authorDto));
+        }
+
+        @Test
+        @DisplayName("Given AuthorDto with empty slug should throw ValidationException")
+        void fromAuthorDtoToAuthorWithEmptySlugTest() {
+            var authorDto = new AuthorDto(1L, "asdfa", "cualquiera", null, null, 0, null, "");
+            assertThrows(ValidationException.class, () -> AuthorMapper.getInstance().fromAuthorDtoToAuthor(authorDto));
         }
     }
 }
